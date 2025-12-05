@@ -4,9 +4,11 @@ import com.car_backend.entities.Role;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 
 public class UserResponseDto {
 	private Long userId;

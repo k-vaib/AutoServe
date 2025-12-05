@@ -19,5 +19,23 @@ public interface UserService {
 	void deleteUser(Long userId);
 
 	List<UserResponseDto> findActiveUsers();
+
+	List<UserResponseDto> getAllCustomers();
+
+	List<UserResponseDto> getAllManagers();
+	
+	List<UserResponseDto> getAllMechanics();
+
+	UserResponseDto getCustomerById(Long customerId);
+
+	UserResponseDto getManager(Long managerId);
+
+	UserResponseDto getMechanic(Long mechanicId);
+
+	List<UserResponseDto> getMechanicsUnderManager(Long managerId);
+
+	UserResponseDto assignManagerToMechanic(Long mechanicId, Long managerId);
+	
+	
 	
 }

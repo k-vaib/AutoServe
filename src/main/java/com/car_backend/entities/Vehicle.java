@@ -25,6 +25,8 @@ public class Vehicle extends BaseEntity{
 	
 	private String color;
 	
+	private boolean isActive;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="customer_id", nullable=false)
 	private User customer;

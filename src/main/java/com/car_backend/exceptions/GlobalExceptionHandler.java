@@ -52,4 +52,24 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	}
+	
+	//5. Handle invalid date exception
+	@ExceptionHandler(InvalidDateException.class)
+	public ResponseEntity<?> handleInvalidDateException(InvalidDateException e){
+		ApiResponse response = new ApiResponse(e.getMessage(), "Invalid date");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

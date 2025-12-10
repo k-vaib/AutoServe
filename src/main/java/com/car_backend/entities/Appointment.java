@@ -29,7 +29,7 @@ public class Appointment extends BaseEntity{
 	private String problemDescription;
 	
 	@Column(name="is_rsa")
-	private boolean isRsa; //rsa = road side assistance
+	private boolean rsa; //rsa = road side assistance
 	
 	@Column(name="rsa_coordinates")
 	private String rsaCoordinates;
@@ -40,9 +40,14 @@ public class Appointment extends BaseEntity{
 	@Column(name="customer_photo_url")
 	private String customerPhotoUrl;
 	
+	@Column(name="rejection_reason")
+    private String rejectionReason;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="vehicle_id", nullable=false)
 	private Vehicle vehicleDetails;
+	
+	
 	
 	
 	

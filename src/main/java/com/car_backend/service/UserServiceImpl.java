@@ -1,4 +1,4 @@
-gitpackage com.car_backend.service;
+package com.car_backend.service;
 
 import java.util.List;
 import java.util.stream.Collectors;

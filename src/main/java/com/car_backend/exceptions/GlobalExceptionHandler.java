@@ -60,7 +60,35 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 	
+	//6. Handle Duplicate job creation
+	@ExceptionHandler(DuplicateJobCreationException.class)
+	public ResponseEntity<?> duplicateJobCreationException(DuplicateJobCreationException e){
+		ApiResponse response = new ApiResponse(e.getMessage(), "Duplicate job");
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+	}
 	
+	//7. Handle unauthorized access
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<?> unauthorizedException(UnauthorizedException e){
+		ApiResponse response = new ApiResponse(e.getMessage(), "unauthorized access");
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+	}
+	
+	
+	//8. User does not exist
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<?> userNotFoundException(UserNotFoundException e){
+		ApiResponse response = new ApiResponse(e.getMessage(), "User does not exist");
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+	}
+	
+	
+	//8. invalid user role
+		@ExceptionHandler(InvalidRoleException.class)
+		public ResponseEntity<?> invalidRoleException(InvalidRoleException e){
+			ApiResponse response = new ApiResponse(e.getMessage(), "User role is invalid");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+		}
 	
 	
 	

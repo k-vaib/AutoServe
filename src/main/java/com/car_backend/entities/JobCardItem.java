@@ -18,20 +18,24 @@ import lombok.Setter;
 
 public class JobCardItem extends BaseEntity{
 	
+	@Column(name="quantity", nullable=false)
 	private int quantity;
 	
-	@Column(name="snapshot_price")
+	@Column(name="snapshot_price", nullable=false)
 	private Double snapshotPrice;
 	
-	@Column(name= "snapshot_item_name")
+	@Column(name= "snapshot_item_name", nullable=false)
 	private String snapshotItemName;
 	
+	@Column(name="total_price", nullable=false)
+	private Double totalPrice;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="job_card_id")
+	@JoinColumn(name="job_card_id", nullable=false)
 	private JobCard jobCard;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="product_id")
-	private Inventory inventory;
+	@JoinColumn(name="product_id", nullable=false)
+	private Inventory inventoryItem;
 	
 }

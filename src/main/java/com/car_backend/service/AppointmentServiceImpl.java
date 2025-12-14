@@ -244,8 +244,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return appointmentRepo.countRsaAppointment();
 	}
 
-
-	
 	
 	private void validateRsaCoordinates(String coordinates) {
 		if(coordinates == null || coordinates.trim().isEmpty()) {

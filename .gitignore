@@ -78,3 +78,5 @@ $RECYCLE.BIN/
 # If you use a separate properties file for secrets
 application-secrets.properties
 application.properties
+
+src/main/resources/application.properties

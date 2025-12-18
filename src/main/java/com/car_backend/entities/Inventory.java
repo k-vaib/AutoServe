@@ -26,13 +26,13 @@ public class Inventory extends BaseEntity{
 	private Double currentPrice;
 	
 	@Column(name="stock_quantity")
-	private int stockQuantity;
+	private Integer stockQuantity;
 	
 	@Column(name="is_deleted")
-	private boolean isDeleted;
+	private boolean deleted;
 	
 	@Version
-	private int version;
+	private Integer version;
 	
 	
 	

@@ -382,19 +382,19 @@ public class JobCardServiceImpl implements JobCardService {
 		if (mechanic.getUserRole() != Role.MECHANIC) {
 			throw new InvalidRoleException("user " + mechanicId + " is not a mechanic.");
 		}
-		
+
 		List<JobCard> jobCard = jobCardRepo.findByMechanic(mechanic);
-	
+
 		return jobCard.stream().map(this::mapResponseToDto).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public List<JobCardResponseDto> getJobCardByStatus(JobCardStatus status) {
 		List<JobCard> jobCard = jobCardRepo.findByJobCardStatus(status);
-		
+
 		return jobCard.stream().map(this::mapResponseToDto).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public List<JobCardResponseDto> getManagerJobCardsByStatus(Long managerId, JobCardStatus status) {
 		User manager = userRepo.findById(managerId)
@@ -403,23 +403,68 @@ public class JobCardServiceImpl implements JobCardService {
 		if (manager.getUserRole() != Role.MANAGER) {
 			throw new InvalidRoleException("user: " + managerId + " does not have a manager role.");
 		}
-		
+
 		List<JobCard> jobCards = jobCardRepo.findByManagerIdAndJobCardStatus(managerId, status);
-		
+
 		return jobCards.stream().map(this::mapResponseToDto).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public List<JobCardResponseDto> getMechanicJobCardsByStatus(Long mechanicId, JobCardStatus status) {
-		User mechanic = userRepo.findById(mechanicId).orElseThrow(()-> new ResourceNotFoundException("mechanic not found."));
-		
-		if(mechanic.getUserRole() != Role.MECHANIC) {
-			throw new InvalidRoleException("User: "+mechanicId+" does not have a role mechanic.");
+		User mechanic = userRepo.findById(mechanicId)
+				.orElseThrow(() -> new ResourceNotFoundException("mechanic not found."));
+
+		if (mechanic.getUserRole() != Role.MECHANIC) {
+			throw new InvalidRoleException("User: " + mechanicId + " does not have a role mechanic.");
 		}
-		
+
 		List<JobCard> jobCards = jobCardRepo.findByMechanicIdAndJobCardStatus(mechanicId, status);
 		return jobCards.stream().map(this::mapResponseToDto).collect(Collectors.toList());
 	}
+
+	@Override
+	public Long getJobCardCount() {
+		return jobCardRepo.count();
+
+	}
+
+	@Override
+	public Long getInProgressCount() {
+
+		return jobCardRepo.countByJobCardStatus(JobCardStatus.IN_PROGRESS);
+	}
+
+	@Override
+	public Long getCompletedCount() {
+
+		return jobCardRepo.countByJobCardStatus(JobCardStatus.COMPLETED);
+	}
+
+	@Override
+	public Long getManagerJobCardCount(Long managerId) {
+
+		return jobCardRepo.countByManagerId(managerId);
+	}
+
+	@Override
+	public Long getMechanicJobCardCount(Long mechanicId) {
+
+		return jobCardRepo.countByMechanicId(mechanicId);
+	}
+
+	@Override
+	public Long countManagerJobCardByStatus(Long managerId, JobCardStatus status) {
+
+		return jobCardRepo.countByManagerIdAndJobCardStatus(managerId, status);
+	}
+
+	@Override
+	public Long countMechanicJobCardByStatus(Long mechanicId, JobCardStatus status) {
+
+		return jobCardRepo.countByMechanicIdAndJobCardStatus(mechanicId, status);
+	}
+
+	// ------------------Helper Methods-------------------
 
 	private User validateAndGetMechanic(Long mechanicId, Long managerId) {
 		User mechanic = userRepo.findById(mechanicId)
@@ -435,8 +480,6 @@ public class JobCardServiceImpl implements JobCardService {
 		}
 		return mechanic;
 	}
-	
-	
 
 	private JobCardResponseDto mapResponseToDto(JobCard jobCard) {
 		Appointment appointment = jobCard.getAppointment();
@@ -489,11 +532,5 @@ public class JobCardServiceImpl implements JobCardService {
 		return JobCardEvidenceDto.builder().id(evidence.getId()).photoUrl(evidence.getPhotoUrl())
 				.description(evidence.getDescription()).uploadedAt(evidence.getUploadedAt()).build();
 	}
-
-	
-
-	
-
-	
 
 }

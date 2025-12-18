@@ -1,5 +1,8 @@
 package com.car_backend.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,9 @@ import com.car_backend.dto.jobCard.AssignMechanicDto;
 import com.car_backend.dto.jobCard.CancelJobCardDto;
 import com.car_backend.dto.jobCard.CreateJobCardDto;
 import com.car_backend.dto.jobCard.JobCardEvidenceDto;
+import com.car_backend.dto.jobCard.JobCardResponseDto;
+import com.car_backend.dto.jobCard.ManagerDashboardDto;
+import com.car_backend.dto.jobCard.MechanicDashboardDto;
 import com.car_backend.entities.JobCardStatus;
 import com.car_backend.service.JobCardService;
 
@@ -142,7 +148,7 @@ public class JobCardController {
 	}
 	
 	
-	@GetMapping("status/{status}")
+	@GetMapping("/status/{status}")
 	public ResponseEntity<?> getJobCardsByStatus(@PathVariable JobCardStatus status){
 		return ResponseEntity.ok(jobCardService.getJobCardByStatus(status));
 	}
@@ -159,6 +165,75 @@ public class JobCardController {
 	}
 	
 	
+	//-----------------------Statistics Endpoints--------------------------
+	
+	@GetMapping("/stats/total_count")
+	public ResponseEntity<?> getTotalJobCardCount(){
+		return ResponseEntity.ok(jobCardService.getJobCardCount());
+	}
+	
+	
+	@GetMapping("/stats/in_progress")
+	public ResponseEntity<?> getInProgressJobCardCount(){
+		return ResponseEntity.ok(jobCardService.getInProgressCount());
+	}
+	
+	
+	@GetMapping("/stats/completed_count")
+	public ResponseEntity<?> getCompletedCount(){
+		return ResponseEntity.ok(jobCardService.getCompletedCount());
+	}
+	
+	@GetMapping("/stats/manager/{managerId}/count")
+	public ResponseEntity<?> getManagerJobCardCount(@PathVariable Long managerId){
+		return ResponseEntity.ok(jobCardService.getManagerJobCardCount(managerId));
+	}
+	
+	@GetMapping("/stats/mechanic/{mechanicId}/count")
+	public ResponseEntity<?> getMechanicJobCardCount(@PathVariable Long mechanicId){
+		return ResponseEntity.ok(jobCardService.getMechanicJobCardCount(mechanicId));
+	}
+	
+	
+	//----------------------------Dashboard Endpoint-----------------------
+	
+	@GetMapping("/dashboard/manager/{managerId}")
+	public ResponseEntity<?> getManagerDashboard(@PathVariable Long managerId){
+		Long totalJobs = jobCardService.getManagerJobCardCount(managerId);
+		Long inProgress = (long) jobCardService.getManagerJobCardsByStatus(managerId, JobCardStatus.IN_PROGRESS).size();
+		Long completed = jobCardService.countManagerJobCardByStatus(managerId, JobCardStatus.COMPLETED);
+		List<JobCardResponseDto> recentJobs = jobCardService.getJobCardByManager(managerId)
+				.stream()
+				.limit(5)
+				.collect(Collectors.toList());
+		
+		ManagerDashboardDto dashboard = ManagerDashboardDto.builder()
+				.totalJobCards(totalJobs)
+				.inProgressJobCards(inProgress)
+				.completedJobCards(completed)
+				.recentJobCards(recentJobs)
+				.build();
+				
+		return ResponseEntity.ok(dashboard);
+	}
+	
+	
+	@GetMapping("/dashboard/mechanic/{mechanicId}")
+	public ResponseEntity<?> getMechanicDashboard(@PathVariable Long mechanicId){
+		Long totalJobs = jobCardService.getMechanicJobCardCount(mechanicId);
+		List<JobCardResponseDto> assignedJobs = jobCardService.getMechanicJobCardsByStatus(mechanicId, JobCardStatus.CREATED);
+		List<JobCardResponseDto> inProgress = jobCardService.getMechanicJobCardsByStatus(mechanicId, JobCardStatus.IN_PROGRESS);
+		Long completedJobs = jobCardService.countMechanicJobCardByStatus(mechanicId, JobCardStatus.COMPLETED);
+		
+		MechanicDashboardDto dashboard = MechanicDashboardDto.builder()
+				.totalJobCards(totalJobs)
+				.assignedJobCards(assignedJobs)
+				.inProgressJobCards(inProgress)
+				.completedJobCards(completedJobs)
+				.build();
+		
+		return ResponseEntity.ok(dashboard);
+	}
 	
 	
 	

@@ -52,52 +52,47 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	}
-	
-	//5. Handle invalid date exception
+
+	// 5. Handle invalid date exception
 	@ExceptionHandler(InvalidDateException.class)
-	public ResponseEntity<?> handleInvalidDateException(InvalidDateException e){
+	public ResponseEntity<?> handleInvalidDateException(InvalidDateException e) {
 		ApiResponse response = new ApiResponse(e.getMessage(), "Invalid date");
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
-	
-	//6. Handle Duplicate job creation
+
+	// 6. Handle Duplicate job creation
 	@ExceptionHandler(DuplicateJobCreationException.class)
-	public ResponseEntity<?> duplicateJobCreationException(DuplicateJobCreationException e){
+	public ResponseEntity<?> duplicateJobCreationException(DuplicateJobCreationException e) {
 		ApiResponse response = new ApiResponse(e.getMessage(), "Duplicate job");
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	}
-	
-	//7. Handle unauthorized access
+
+	// 7. Handle unauthorized access
 	@ExceptionHandler(UnauthorizedException.class)
-	public ResponseEntity<?> unauthorizedException(UnauthorizedException e){
+	public ResponseEntity<?> unauthorizedException(UnauthorizedException e) {
 		ApiResponse response = new ApiResponse(e.getMessage(), "unauthorized access");
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 	}
-	
-	
-	//8. User does not exist
+
+	// 8. User does not exist
 	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<?> userNotFoundException(UserNotFoundException e){
+	public ResponseEntity<?> userNotFoundException(UserNotFoundException e) {
 		ApiResponse response = new ApiResponse(e.getMessage(), "User does not exist");
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 	}
-	
-	
-	//8. invalid user role
-		@ExceptionHandler(InvalidRoleException.class)
-		public ResponseEntity<?> invalidRoleException(InvalidRoleException e){
-			ApiResponse response = new ApiResponse(e.getMessage(), "User role is invalid");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-		}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	// 9. invalid user role
+	@ExceptionHandler(InvalidRoleException.class)
+	public ResponseEntity<?> invalidRoleException(InvalidRoleException e) {
+		ApiResponse response = new ApiResponse(e.getMessage(), "User role is invalid");
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+	}
+
+	// 10. payment exception handler
+	@ExceptionHandler(PaymentException.class)
+	public ResponseEntity<?> handlePaymentException(PaymentException ex) {
+		ApiResponse response = new ApiResponse(ex.getMessage(), "Payment processing failed");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+
 }
